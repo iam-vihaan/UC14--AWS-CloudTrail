@@ -1,0 +1,23 @@
+name: Terraform Refresh
+
+on:
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+jobs:
+  terraform-refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.0  # Adjust version as needed
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Refresh
+        run: terraform refresh
