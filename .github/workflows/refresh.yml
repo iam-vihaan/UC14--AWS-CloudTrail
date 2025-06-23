@@ -1,23 +1,46 @@
-name: Terraform Refresh
+name: Infra
 
 on:
-  workflow_dispatch:  # Allows manual triggering from GitHub UI
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+env:
+  AWS_REGION: us-east-1
+
 
 jobs:
-  terraform-refresh:
-    runs-on: ubuntu-latest
+  terraform-refresh:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.10.0  # Adjust version as needed
+          terraform_version: 1.10.0
 
-      - name: Terraform Init
-        run: terraform init
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::784733659029:role/oidc-role
+          aws-region:  us-east-1
 
-      - name: Terraform Refresh
-        run: terraform refresh
+     
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Refresh
+        run: terraform refresh
+
