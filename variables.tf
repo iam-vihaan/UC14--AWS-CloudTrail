@@ -1,6 +1,7 @@
 variable "notification_email" {
   description = "Email to receive login notifications"
   type        = string
+  default     = "kasiviswanath.ala@hcltech.com"
 }
 
 variable "cloudtrail_name" {
